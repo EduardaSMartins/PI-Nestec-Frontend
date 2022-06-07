@@ -1,0 +1,44 @@
+[
+  {
+    "name": "clientes",
+    "path": "/clientes",
+    "component": "/home/eduarda/Documents/BCC/PI/Nestec/PI-Nestec-Frontend/pages/clientes/index.vue",
+    "chunkName": "pages/clientes/index",
+    "_name": "_31319b30"
+  },
+  {
+    "name": "produtos",
+    "path": "/produtos",
+    "component": "/home/eduarda/Documents/BCC/PI/Nestec/PI-Nestec-Frontend/pages/produtos/index.vue",
+    "chunkName": "pages/produtos/index",
+    "_name": "_7a260cd1"
+  },
+  {
+    "name": "clientes-novo",
+    "path": "/clientes/novo",
+    "component": "/home/eduarda/Documents/BCC/PI/Nestec/PI-Nestec-Frontend/pages/clientes/novo.vue",
+    "chunkName": "pages/clientes/novo",
+    "_name": "_6d8a0c4c"
+  },
+  {
+    "name": "produtos-novo",
+    "path": "/produtos/novo",
+    "component": "/home/eduarda/Documents/BCC/PI/Nestec/PI-Nestec-Frontend/pages/produtos/novo.vue",
+    "chunkName": "pages/produtos/novo",
+    "_name": "_5f60628b"
+  },
+  {
+    "name": "produtos-components-form-produto",
+    "path": "/produtos/components/form-produto",
+    "component": "/home/eduarda/Documents/BCC/PI/Nestec/PI-Nestec-Frontend/pages/produtos/components/form-produto.vue",
+    "chunkName": "pages/produtos/components/form-produto",
+    "_name": "_c0b37bf0"
+  },
+  {
+    "name": "index",
+    "path": "/",
+    "component": "/home/eduarda/Documents/BCC/PI/Nestec/PI-Nestec-Frontend/pages/index.vue",
+    "chunkName": "pages/index",
+    "_name": "_06f6d564"
+  }
+]
