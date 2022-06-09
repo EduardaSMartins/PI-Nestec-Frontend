@@ -1,13 +1,9 @@
 <template>
-    <!-- <div class="mt-2 w-full" style="max-height: 80vh">
+  <!-- <div class="mt-2 w-full" style="max-height: 80vh">
       <ProdutosBody :produto="produto" />
     <div> -->
-    <div class="mt-2 w-full" style="max-height: 80vh">
-      <FormProduto :produto="produto" 
-      
-      methods="POST"
-      :link="`api/produto/adicionar`"
-      />  
+  <div class="mt-2 w-full" style="max-height: 80vh">
+    <FormProduto :produto="produto" methods="post" :link="`api/produto/adicionar`" />
   </div>
 </template>
 
@@ -18,15 +14,11 @@ export default {
   components: { ProdutosBody, FormProduto },
   beforeRouteLeave(to, from, next) {
     if (this.isEditing) {
-      this.$confirm(
-        "Você perderá suas modificações. Quer continuar?",
-        "Atenção",
-        {
-          confirmButtonText: "Sair",
-          cancelButtonText: "Cancelar",
-          type: "error",
-        }
-      )
+      this.$confirm("Você perderá suas modificações. Quer continuar?", "Atenção", {
+        confirmButtonText: "Sair",
+        cancelButtonText: "Cancelar",
+        type: "error",
+      })
         .then(() => {
           // this.resetMixinProjeto()
           next();
@@ -50,9 +42,9 @@ export default {
         quantidade_minima: 1,
         quantidade_caixa: 1,
         quantidade_estoque: 0,
-        valor_unitario: 0
+        valor_unitario: 0,
       },
-    }
+    };
   },
   methods: {},
 };

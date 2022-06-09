@@ -28,9 +28,7 @@ entregas e trocas da Nestlé S.A. no Brasil.
  
 - Rodar a aplicação
  
-   npm run build
-   
-   npm run start
+   yarn dev
  
 # Contato
 - Eduarda Martins: eduardamartins@alunos.utfpr.edu.br

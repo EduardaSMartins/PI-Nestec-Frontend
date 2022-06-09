@@ -3,35 +3,30 @@
     <div class="flex justify-between my-5">
       <h2 class="text-gray-800 text-xl w-2/12">Produtos</h2>
       <div class="flex">
-        <el-button type="primary" @click="handleNew" icon="el-icon-plus">Novo</el-button>
-        <el-button class="flex" @click="drawer = true">
+        <el-button type="primary" @click="dialogFormVisible = true" icon="el-icon-plus"
+          >Novo</el-button
+        >
+        <!-- <el-button class="flex" @click="drawer = true">
           <i-filter theme="outline" size="20" fill="#4a4a4a" :strokeWidth="2" />
-        </el-button>
+        </el-button> -->
       </div>
     </div>
 
     <!-- Table -->
     <div class="border overflow-y-auto rounded-md" style="max-height: 70vh">
       <el-table :data="tableData" style="width: 100%" header-align="center">
-        <el-table-column prop="codigo" label="Código"> </el-table-column>
-        <el-table-column prop="nomeProduto" label="Nome"> </el-table-column>
-        <el-table-column prop="valorUnitario" label="Preço"> </el-table-column>
-        <el-table-column prop="idTipo" label="Categoria"> </el-table-column>
+        <el-table-column prop="codigo_interno" label="Código"> </el-table-column>
+        <el-table-column prop="nome" label="Nome"> </el-table-column>
+        <el-table-column prop="valor_unitario" label="Preço"> </el-table-column>
         <el-table-column prop="descricao" label="Descrição"> </el-table-column>
         <el-table-column prop="cor" label="Cor"></el-table-column>
-        <el-table-column align="center" width="90"
+        <!-- <el-table-column align="center" width="90"
           ><template slot-scope="scope" class="flex">
             <el-button-group>
-              <el-button
-                type="edit"
-                size="medium"
-                icon="el-icon-edit"
-                @click.native.prevent="onUpdate(scope.$index, scope.row)"
-              ></el-button>
-              ></el-button-group
-            >
+              <el-button type="edit" size="medium" icon="el-icon-edit"> </el-button>
+            </el-button-group>
           </template>
-        </el-table-column>
+        </el-table-column> -->
       </el-table>
     </div>
 
@@ -43,28 +38,14 @@
         :close-on-click-modal="false"
         :visible.sync="dialogFormVisible"
       >
-        <el-form
-          ref="form"
-          :model="form"
-          style="margin: auto"
-          label-position="top"
-        ></el-form>
-
-        <el-form>
-          <div class="mt-2 w-half" style="max-height: 80vh"></div>
-          <FormProduto
-            :produto="produto"
-            methods="POST"
-            :link="`api/produto/adicionar`"
-          />
-        </el-form>
-
-        <span slot="footer" class="dialog-footer">
-          <el-button type="danger" @click="dialogFormVisible = false">Cancelar</el-button>
-          <el-button type="primary" @click="onSubmit">Enviar</el-button>
-        </span>
-        ></el-dialog
-      >
+        <FormProduto
+          :produto="produto"
+          methods="POST"
+          link="api/produto/adicionar"
+          :dialogFormVisible="dialogFormVisible"
+          @statusDialogo="statusDialogo(event)"
+        />
+      </el-dialog>
     </div>
 
     <!-- Pagination -->
@@ -118,9 +99,11 @@
 
 <script>
 import { VMoney } from "v-money";
-import FormProduto from "../../../pages/produtos/components/form-produto.vue";
+import FormProduto from "~/pages/produtos/components/form-produto.vue";
 export default {
   directives: { money: VMoney },
+  components: { FormProduto },
+
   data() {
     return {
       codigoInput: false,
@@ -143,22 +126,29 @@ export default {
       dialogFormVisible: false,
       selectCategoria: [],
       formEdit: [],
-      form: {
-        codigo: "",
-        nomeProduto: "",
-        valorUnitario: 0,
-        idTipo: "",
-        descricao: "",
-      },
-      tableData: [{}],
+
+      tableData: [],
       tableSecundaria: [],
+      produto: {
+        nome: null,
+        descricao: null,
+        codigo_barras: null,
+        codigo_interno: null,
+        sabor: null,
+        cor: null,
+        tamanho: null,
+        quantidade_minima: 1,
+        quantidade_caixa: 1,
+        quantidade_estoque: 0,
+        valor_unitario: 0,
+      },
     };
   },
   layout: false,
   mounted() {
     this.tableSecundaria = this.tableData.slice(0, 10);
     this.allData();
-    this.loadCategorias();
+    // this.loadCategorias();
   },
   methods: {
     async allData() {
@@ -169,20 +159,10 @@ export default {
         };
       });
       if (status === 200) {
-        this.tableData = data.data;
+        this.tableData = data;
       }
     },
-    async loadCategorias() {
-      const { data, status } = await this.$axios.get("api/tipo/").catch((error) => {
-        return {
-          data: [],
-          status: error.response.status,
-        };
-      });
-      if (status === 200) {
-        this.selectCategoria = data[0].data;
-      }
-    },
+
     handleSizeChange(val) {
       this.pageSize = val;
       this.tableSecundaria = this.tableData.slice(this.firstItem, this.pageSize);
@@ -190,70 +170,10 @@ export default {
     handleCurrentChange(val) {
       this.currentPage = val;
     },
-    handleNew() {
-      this.form = {
-        nomeProduto: "",
-        codigo: "",
-        valorUnitario: "",
-        idTipo: "",
-        descricao: "",
-      };
-      this.metodo = "post";
-      this.enderecoMetodo = "api/produto/add";
-      this.tituloModal = "Novo Produto";
-      this.dialogFormVisible = true;
-      this.codigoInput = false;
+    statusDialogo(event) {
+      this.dialogFormVisible = event;
     },
-    async handleEdit(index, row) {
-      this.dialogFormVisible = true;
-      const { data, status } = await this.$axios
-        .get("api/produto?filter[idProduto]=" + this.tableData[index]["idProduto"])
-        .catch((error) => {
-          return {
-            data: [],
-            status: error.response.status,
-          };
-        });
-      if (status === 200) {
-        this.form = data.data[0];
-        this.codigoInput = true;
-      }
-      this.metodo = "put";
-      this.enderecoMetodo = "api/produto/update/" + this.tableData[index]["idProduto"];
-      this.tituloModal = "Editar Produto";
-    },
-    async onSubmit() {
-      this.dialogFormVisible = false;
-      let novoproduto = {
-        nomeProduto: this.form.nomeProduto,
-        codigo: this.form.codigo,
-        valorUnitario: this.form.valorUnitario,
-        idTipo: this.form.idTipo,
-        descricao: this.form.descricao,
-      };
-      const { data, status } = await this.$axios({
-        method: this.metodo,
-        url: this.enderecoMetodo,
-        data: novoproduto,
-      }).catch((error) => {
-        return {
-          data: [],
-          status: error.response.status,
-        };
-      });
-      if (status === 200) {
-        this.form = {
-          nomeProduto: "",
-          codigo: "",
-          valorUnitario: "",
-          idTipo: "",
-          descricao: "",
-        };
-        this.messageSave();
-      } else {
-        this.messageError();
-      }
-    },
+
     onDelete(index, dados) {
       this.$confirm(
         "Esta ação deletará este produto e todos seus dados. Deseja continuar?",
@@ -286,30 +206,7 @@ export default {
           });
         });
     },
-    async validateTipo() {
-      if (typeof this.form.idTipo === "string") {
-        let novoTipo = {
-          nomeTipo: this.form.idTipo,
-        };
-        const { data, status } = await this.$axios({
-          method: "post",
-          url: "api/tipo/add",
-          data: novoTipo,
-        }).catch((error) => {
-          return {
-            data: [],
-            status: error.response.status,
-          };
-        });
-        if (status === 200) {
-          this.selectCategoria.push(data);
-          this.form.idTipo = data.idTipo;
-          this.messageSave();
-        } else {
-          this.messageError();
-        }
-      }
-    },
+
     nextPage() {
       this.firstItem = this.lastItem + 1;
       if (this.tableData.length < this.pageSize * this.currentPage) {
@@ -346,7 +243,6 @@ export default {
       });
     },
   },
-  components: { FormProduto },
 };
 </script>
 <style></style>
