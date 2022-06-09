@@ -1,11 +1,9 @@
 <template>
-    <div class="m-auto 2xl:w-11/12 w-5/6">
+  <div class="m-auto 2xl:w-11/12 w-5/6">
     <div class="flex justify-between my-5">
       <h2 class="text-gray-800 text-xl w-2/12">Produtos</h2>
       <div class="flex">
-        <el-button type="primary" @click="handleNew" icon="el-icon-plus"
-          >Novo</el-button
-        >
+        <el-button type="primary" @click="handleNew" icon="el-icon-plus">Novo</el-button>
         <el-button class="flex" @click="drawer = true">
           <i-filter theme="outline" size="20" fill="#4a4a4a" :strokeWidth="2" />
         </el-button>
@@ -18,23 +16,20 @@
         <el-table-column prop="codigo" label="Código"> </el-table-column>
         <el-table-column prop="nomeProduto" label="Nome"> </el-table-column>
         <el-table-column prop="valorUnitario" label="Preço"> </el-table-column>
-        <el-table-column prop="idTipo" label="Categoria"> </el-table-column
-        ><el-table-column prop="descricao" label="Descrição"> </el-table-column>
-        <el-table-column align="center" label="Operações" width="170"
+        <el-table-column prop="idTipo" label="Categoria"> </el-table-column>
+        <el-table-column prop="descricao" label="Descrição"> </el-table-column>
+        <el-table-column prop="cor" label="Cor"></el-table-column>
+        <el-table-column align="center" width="90"
           ><template slot-scope="scope" class="flex">
             <el-button-group>
-
               <el-button
-                type="primary" size="small"
-                @click="handleEdit(scope.$index, scope.row)"
+                type="edit"
+                size="medium"
                 icon="el-icon-edit"
+                @click.native.prevent="onUpdate(scope.$index, scope.row)"
               ></el-button>
-              <el-button
-                type="danger" size="small"
-                @click.native.prevent="onDelete(scope.$index, scope.row)"
-                icon="el-icon-delete"
-              ></el-button
-            ></el-button-group>
+              ></el-button-group
+            >
           </template>
         </el-table-column>
       </el-table>
@@ -53,72 +48,23 @@
           :model="form"
           style="margin: auto"
           label-position="top"
-        >
-          <div class="flex flex-wrap justify-between p-8">
-            <el-form-item label="Código" class="w-2/5" prop="codigo">
-              <el-input
-                v-model="form.codigo"
-                v-mask="'####-##'"
-                placeholder="Código"
-                autocomplete="off"
-                :disabled="codigoInput"
-              ></el-input>
-            </el-form-item>
+        ></el-form>
 
-            <el-form-item label="Preço" class="w-2/5" prop="valorUnitario">
-              <el-input
-                autocomplete="off"
-                v-model="form.valorUnitario"
-              ></el-input>
-            </el-form-item>
-
-            <el-form-item
-              class="w-2/5"
-
-              label="Nome"
-              prop="nomeProduto"
-            >
-              <el-input
-                v-model="form.nomeProduto"
-                placeholder="Nome"
-                autocomplete="off"
-              ></el-input>
-            </el-form-item>
-            <el-form-item label="Categoria" class="w-2/5" prop="idTipo">
-              <el-select
-                v-model="form.idTipo"
-                filterable
-                allow-create
-                @change="validateTipo(form.idTipo)"
-                placeholder="Select"
-              >
-                <el-option
-                  v-for="item in selectCategoria"
-                  :key="item.idTipo"
-                  :label="item.nomeTipo"
-                  :value="item.idTipo"
-                >
-                </el-option>
-              </el-select>
-            </el-form-item>
-
-            <el-form-item label="Descrição ">
-              <el-input
-                type="textarea"
-                v-model="form.descricao"
-                placeholder="Descrição"
-                autocomplete="off"
-              ></el-input>
-            </el-form-item>
-          </div>
+        <el-form>
+          <div class="mt-2 w-half" style="max-height: 80vh"></div>
+          <FormProduto
+            :produto="produto"
+            methods="POST"
+            :link="`api/produto/adicionar`"
+          />
         </el-form>
+
         <span slot="footer" class="dialog-footer">
-          <el-button type="danger" @click="dialogFormVisible = false"
-            >Cancelar</el-button
-          >
+          <el-button type="danger" @click="dialogFormVisible = false">Cancelar</el-button>
           <el-button type="primary" @click="onSubmit">Enviar</el-button>
         </span>
-      </el-dialog>
+        ></el-dialog
+      >
     </div>
 
     <!-- Pagination -->
@@ -142,11 +88,7 @@
     <el-drawer title="Filtrar" :visible.sync="drawer" size="20%">
       <hr />
       <div style="height: 90%" class="p-5">
-        <el-input
-          placeholder="Pesquisar"
-          v-model="input"
-          class="input-with-select mr-5"
-        >
+        <el-input placeholder="Pesquisar" v-model="input" class="input-with-select mr-5">
           <el-button
             slot="append"
             icon="el-icon-search"
@@ -158,17 +100,9 @@
           <span class="text-sm">Preço</span>
           <br />
 
-          <el-input
-            placeholder="Min"
-            style="width: 30%"
-            v-model="minFilter"
-          ></el-input>
+          <el-input placeholder="Min" style="width: 30%" v-model="minFilter"></el-input>
           -
-          <el-input
-            placeholder="Máx"
-            style="width: 30%"
-            v-model="maxFilter"
-          ></el-input>
+          <el-input placeholder="Máx" style="width: 30%" v-model="maxFilter"></el-input>
         </div>
         <div class="mt-10 block">
           <el-collapse v-model="activeName" accordion> </el-collapse>
@@ -182,9 +116,9 @@
   </div>
 </template>
 
-
 <script>
 import { VMoney } from "v-money";
+import FormProduto from "../../../pages/produtos/components/form-produto.vue";
 export default {
   directives: { money: VMoney },
   data() {
@@ -207,10 +141,8 @@ export default {
       metodo: "",
       dialogTableVisible: false,
       dialogFormVisible: false,
-
       selectCategoria: [],
       formEdit: [],
-
       form: {
         codigo: "",
         nomeProduto: "",
@@ -223,53 +155,41 @@ export default {
     };
   },
   layout: false,
-
   mounted() {
     this.tableSecundaria = this.tableData.slice(0, 10);
     this.allData();
     this.loadCategorias();
   },
-
   methods: {
     async allData() {
-      const { data, status } = await this.$axios
-        .get("api/produto/")
-        .catch((error) => {
-          return {
-            data: [],
-            status: error.response.status,
-          };
-        });
+      const { data, status } = await this.$axios.get("api/produto/").catch((error) => {
+        return {
+          data: [],
+          status: error.response.status,
+        };
+      });
       if (status === 200) {
         this.tableData = data.data;
       }
     },
     async loadCategorias() {
-      const { data, status } = await this.$axios
-        .get("api/tipo/")
-        .catch((error) => {
-          return {
-            data: [],
-            status: error.response.status,
-          };
-        });
+      const { data, status } = await this.$axios.get("api/tipo/").catch((error) => {
+        return {
+          data: [],
+          status: error.response.status,
+        };
+      });
       if (status === 200) {
         this.selectCategoria = data[0].data;
       }
     },
-
     handleSizeChange(val) {
       this.pageSize = val;
-      this.tableSecundaria = this.tableData.slice(
-        this.firstItem,
-        this.pageSize
-      );
+      this.tableSecundaria = this.tableData.slice(this.firstItem, this.pageSize);
     },
-
     handleCurrentChange(val) {
       this.currentPage = val;
     },
-
     handleNew() {
       this.form = {
         nomeProduto: "",
@@ -284,13 +204,10 @@ export default {
       this.dialogFormVisible = true;
       this.codigoInput = false;
     },
-
     async handleEdit(index, row) {
       this.dialogFormVisible = true;
       const { data, status } = await this.$axios
-        .get(
-          "api/produto?filter[idProduto]=" + this.tableData[index]["idProduto"]
-        )
+        .get("api/produto?filter[idProduto]=" + this.tableData[index]["idProduto"])
         .catch((error) => {
           return {
             data: [],
@@ -302,14 +219,11 @@ export default {
         this.codigoInput = true;
       }
       this.metodo = "put";
-      this.enderecoMetodo =
-        "api/produto/update/" + this.tableData[index]["idProduto"];
+      this.enderecoMetodo = "api/produto/update/" + this.tableData[index]["idProduto"];
       this.tituloModal = "Editar Produto";
     },
-
     async onSubmit() {
       this.dialogFormVisible = false;
-
       let novoproduto = {
         nomeProduto: this.form.nomeProduto,
         codigo: this.form.codigo,
@@ -317,7 +231,6 @@ export default {
         idTipo: this.form.idTipo,
         descricao: this.form.descricao,
       };
-
       const { data, status } = await this.$axios({
         method: this.metodo,
         url: this.enderecoMetodo,
@@ -341,7 +254,6 @@ export default {
         this.messageError();
       }
     },
-
     onDelete(index, dados) {
       this.$confirm(
         "Esta ação deletará este produto e todos seus dados. Deseja continuar?",
@@ -357,7 +269,6 @@ export default {
             type: "success",
             message: "Deletado com sucesso",
           });
-
           this.$axios
             .delete(`api/produto/delete/${dados.idProduto}`)
             .then((response) => {
@@ -375,13 +286,11 @@ export default {
           });
         });
     },
-
     async validateTipo() {
       if (typeof this.form.idTipo === "string") {
         let novoTipo = {
           nomeTipo: this.form.idTipo,
         };
-
         const { data, status } = await this.$axios({
           method: "post",
           url: "api/tipo/add",
@@ -393,16 +302,14 @@ export default {
           };
         });
         if (status === 200) {
-          this.selectCategoria.push(data)
+          this.selectCategoria.push(data);
           this.form.idTipo = data.idTipo;
           this.messageSave();
-
         } else {
           this.messageError();
         }
       }
     },
-
     nextPage() {
       this.firstItem = this.lastItem + 1;
       if (this.tableData.length < this.pageSize * this.currentPage) {
@@ -410,19 +317,12 @@ export default {
       } else {
         this.lastItem += this.pageSize;
       }
-      this.tableSecundaria = this.tableData.slice(
-        this.firstItem,
-        this.lastItem + 1
-      );
+      this.tableSecundaria = this.tableData.slice(this.firstItem, this.lastItem + 1);
     },
     prevPage() {
       this.lastItem = this.firstItem - 1;
-
       this.firstItem = this.firstItem - this.pageSize;
-      this.tableSecundaria = this.tableData.slice(
-        this.firstItem,
-        this.lastItem + 1
-      );
+      this.tableSecundaria = this.tableData.slice(this.firstItem, this.lastItem + 1);
     },
     messageDelete() {
       this.$message({
@@ -446,7 +346,7 @@ export default {
       });
     },
   },
+  components: { FormProduto },
 };
 </script>
- <style>
-</style>
+<style></style>

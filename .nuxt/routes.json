@@ -21,18 +21,25 @@
     "_name": "_6d8a0c4c"
   },
   {
-    "name": "produtos-novo",
-    "path": "/produtos/novo",
-    "component": "/home/eduarda/Documents/BCC/PI/Nestec/PI-Nestec-Frontend/pages/produtos/novo.vue",
-    "chunkName": "pages/produtos/novo",
-    "_name": "_5f60628b"
-  },
-  {
     "name": "produtos-components-form-produto",
     "path": "/produtos/components/form-produto",
     "component": "/home/eduarda/Documents/BCC/PI/Nestec/PI-Nestec-Frontend/pages/produtos/components/form-produto.vue",
     "chunkName": "pages/produtos/components/form-produto",
     "_name": "_c0b37bf0"
+  },
+  {
+    "name": "produtos-novo-novo",
+    "path": "/produtos/novo/novo",
+    "component": "/home/eduarda/Documents/BCC/PI/Nestec/PI-Nestec-Frontend/pages/produtos/novo/novo.vue",
+    "chunkName": "pages/produtos/novo/novo",
+    "_name": "_c06d3224"
+  },
+  {
+    "name": "produtos-editar-id",
+    "path": "/produtos/editar/:id?",
+    "component": "/home/eduarda/Documents/BCC/PI/Nestec/PI-Nestec-Frontend/pages/produtos/editar/_id.vue",
+    "chunkName": "pages/produtos/editar/_id",
+    "_name": "_171ab212"
   },
   {
     "name": "index",

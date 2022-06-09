@@ -12,7 +12,7 @@
     "
     style="width: 96%"
   >
-    <FormProduto />
+    <ProdutosBody />
   </div>
 
  <div
@@ -21,7 +21,7 @@
     style="width: 90%"
 
   >
-    <FormProduto />
+    <ProdutosBody />
   </div>
 </template>
 
@@ -31,7 +31,7 @@ import ProdutosBody from "../../layouts/components/pageBody/produtosBody.vue";
 import FormProduto from "./components/form-produto.vue";
 
 export default {
-  components: { ProdutosBody, FormProduto, FormProduto },
+  components: { ProdutosBody, FormProduto },
   computed: {
     ...mapState({
       collapsed: (state) => state.isCollapsed,

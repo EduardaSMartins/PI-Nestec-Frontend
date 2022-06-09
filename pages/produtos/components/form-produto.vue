@@ -1,41 +1,44 @@
 <template>
-  <div class="rounded-sm mt-2 w-full" style="max-height: 80vh">
+  <div class="rounded-sm mt-4 w-full" style="max-height: 90vh">
     <template>
-      <div class="mb-5 flex justify-between">
-        <h1 v-if="methods === 'post'" class="text-2xl">Novo Produto</h1>
-        <nuxt-link to="/produtos" class="mr-2"
-          ><el-button
-            type="success"
-            class="botaoHeader"
-            plain
-            icon="el-icon-arrow-left"
-            >Listar</el-button
-          ></nuxt-link
-        >
+      <div class="mb-4 flex justify-between">
+        <h1 v-if="methods === 'post'" class="text-0xl">Novo Produto</h1>
+        <nuxt-link to="/produtos" class="mr-2"></nuxt-link>
       </div>
       <el-form
         :model="ruleForm"
         :rules="rules"
         ref="ruleForm"
-        label-width="120px"
+        label-width="100px"
         class="demo-ruleForm"
       >
         <el-form-item label="Nome" prop="nome">
-          <el-input v-model="produto.name"></el-input>
+          <el-input
+            placeholder=""
+            width:50
+            v-model="produto.name"
+            :disabled="false"
+          ></el-input>
         </el-form-item>
+
+        <!-- chamar mixin de categorias -->
 
         <el-form-item label="Descrição" prop="descricao">
-          <el-input v-model="produto.descricao"></el-input>
+          <el-input
+            type="textarea"
+            :autosize="{ minRows: 2, maxRows: 4 }"
+            v-model="produto.descricao"
+          ></el-input>
         </el-form-item>
 
-        <el-form-item label="Código de Barras" prop="codigo_barras">
-          <el-col :span="11">
+        <el-form-item label="Código Barras" prop="codigo_barras">
+          <el-col :span="20">
             <el-input v-model="produto.codigo_barras"></el-input>
           </el-col>
         </el-form-item>
 
         <el-form-item label="Código Interno" prop="codigo_interno">
-          <el-col :span="11">
+          <el-col :span="20">
             <el-input v-model="produto.codigo_interno"></el-input>
           </el-col>
         </el-form-item>
@@ -48,7 +51,7 @@
 
         <el-form-item label="Cor" prop="cor">
           <div class="block">
-            <span class="demonstration">Selecione uma cor</span>
+            <span class="demonstration"></span>
             <el-color-picker v-model="produto.cor"></el-color-picker>
           </div>
           <el-col :span="11">
@@ -57,12 +60,18 @@
         </el-form-item>
 
         <el-form-item label="Quantidade Mínima" prop="quantidade_minima">
-          <el-col :span="11">
-            <el-input v-model="produto.quantidade_minima"></el-input>
-          </el-col>
+          <!-- <el-col :span="11"> -->
+          <el-input-number
+            v-model="produto.quantidade_minima"
+            @change="handleChange"
+            :min="1"
+            :max="1000"
+          ></el-input-number>
+          <!-- <el-input v-model="produto.quantidade_minima"></el-input> -->
+          <!-- </el-col> -->
         </el-form-item>
 
-        <el-form-item label="Quantidade por Caixa" prop="quantidade_caixa">
+        <el-form-item label="Quantidade Caixa" prop="quantidade_caixa">
           <el-col :span="11">
             <el-input v-model="produto.quantidade_caixa"></el-input>
           </el-col>
@@ -76,20 +85,8 @@
 
         <el-form-item label="Valor Unitário" prop="valor_unitario">
           <el-col :span="11">
-            <el-currency-input
-              v-model="produto.valor_unitario"
-            ></el-currency-input>
+            <el-currency-input v-model="produto.valor_unitario"></el-currency-input>
           </el-col>
-        </el-form-item>
-
-        <el-form-item label="Instant delivery" prop="delivery">
-          <el-switch v-model="ruleForm.delivery"></el-switch>
-        </el-form-item>
-        <el-form-item>
-          <el-button type="primary" @click="submitForm('ruleForm')"
-            >Create</el-button
-          >
-          <el-button @click="resetForm('ruleForm')">Reset</el-button>
         </el-form-item>
       </el-form>
     </template>
