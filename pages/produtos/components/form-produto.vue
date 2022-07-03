@@ -11,34 +11,58 @@
         label-width="110px"
         label-position="vertical-align"
         class="demo-ruleForm"
+        :inline="true"
       >
-        <el-form-item label="Nome" prop="nome">
-          <el-input
-            placeholder=""
-            width:100
-            v-model="produto.nome"
-            :disabled="false"
-          ></el-input>
-        </el-form-item>
-
+        <el-row :gutter="10">
+          <el-col :span="12">
+            <el-form-item label="Nome" prop="nome">
+              <el-input
+                placeholder=""
+                width:50
+                v-model="produto.nome"
+                :disabled="false"
+              ></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="10">
+            <el-form-item label="Categoria" prop="idCategoria">
+              <el-select
+                :disabled="visualizacao"
+                class="pr-2"
+                allow-create
+                v-model="produto.idCategoria"
+                filterable
+                @change="selectCategoria(produto.idCategoria)"
+              >
+                <el-option
+                  v-for="item in mixinDepartamentos"
+                  :key="item.id"
+                  :label="item.dep_nome"
+                  :value="item.id"
+                >
+                </el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+        </el-row>
         <!-- chamar mixin de categorias -->
-
-        <el-form-item label="Descrição" prop="descricao">
-          <el-input type="textarea" v-model="produto.descricao"></el-input>
-        </el-form-item>
-
-        <el-form-item label="Código Barras" prop="codigo_barras">
-          <el-col :span="10">
-            <el-input v-model="produto.codigo_barras"></el-input>
+        <el-row :gutter="10">
+          <el-col :span="8">
+            <el-form-item label="Descrição" prop="descricao">
+              <el-input type="textarea" v-model="produto.descricao"></el-input>
+            </el-form-item>
           </el-col>
-        </el-form-item>
-
-        <el-form-item label="Código Interno" prop="codigo_interno">
-          <el-col :span="10">
-            <el-input v-model="produto.codigo_interno"></el-input>
+          <el-col :span="8">
+            <el-form-item label="Cod Barras" prop="codigo_barras">
+              <el-input v-model="produto.codigo_barras"></el-input>
+            </el-form-item>
           </el-col>
-        </el-form-item>
-
+          <el-col :span="8">
+            <el-form-item label="Cod Interno" prop="codigo_interno">
+              <el-input v-model="produto.codigo_interno"></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
         <el-form-item label="Sabor" prop="sabor">
           <el-col :span="10">
             <el-input v-model="produto.sabor"></el-input>
@@ -46,7 +70,7 @@
         </el-form-item>
 
         <el-form-item label="Cor" prop="cor">
-          <el-col :span="10">
+          <el-col :span="12">
             <!-- <el-color-picker v-model="produto.cor"></el-color-picker> -->
             <el-input type="color" v-model="produto.cor"></el-input>
 
@@ -117,25 +141,73 @@ export default {
     return {
       rules: {
         nome: [{ required: true, message: "Digite um nome.", trigger: "blur" }],
+        idCategoria: [
+          {
+            required: true,
+            message: "Selecione uma categoria",
+            trigger: "blur",
+          },
+        ],
         codigo_interno: [
-          { required: true, message: "Digite o código interno", trigger: "blur" },
+          {
+            required: true,
+            message: "Digite o código interno",
+            trigger: "blur",
+          },
         ],
         codigo_barras: [
-          { required: true, message: "Digite o código de barras", trigger: "blur" },
+          {
+            required: true,
+            message: "Digite o código de barras",
+            trigger: "blur",
+          },
         ],
         quantidade_minima: [
-          { required: true, message: "Digite a quantidade mínima", trigger: "blur" },
+          {
+            required: true,
+            message: "Digite a quantidade mínima",
+            trigger: "blur",
+          },
         ],
         quantidade_estoque: [
-          { required: true, message: "Digite a quantidade em estoque", trigger: "blur" },
+          {
+            required: true,
+            message: "Digite a quantidade em estoque",
+            trigger: "blur",
+          },
         ],
         valor_unitario: [
-          { required: true, message: "Digite o valor unitário", trigger: "blur" },
+          {
+            required: true,
+            message: "Digite o valor unitário",
+            trigger: "blur",
+          },
         ],
       },
     };
   },
   methods: {
+    async getMixin() {
+      const { data, status } = await this.$axios
+        .get("api/produto/mixin")
+        .catch((error) => {
+          return {
+            data: [],
+            status: error.response.status,
+          };
+        });
+      this.loading = false;
+      if (status === 200) {
+        {{categorias}}
+        this.mixinCategoria = data.categorias;
+      }
+    },
+    selectCategoria(id) {
+      var index = _.find(this.mixinCategoria, function (func) {
+        return produto.idCategoria === id;
+      });
+      this.produto.idCategoria = index.mixinCategoria;
+    },
     statusDialogo() {
       this.$emit("statusDialogo", !this.dialogFormVisible);
     },
@@ -159,11 +231,6 @@ export default {
               type: "success",
             });
             this.$route.go();
-            // this.produto = {
-            //   dep_nome: "",
-            //   dep_sigla: "",
-            // };
-            // location.reload();
           } else {
             this.$message({
               message: "Algo deu problema.",
@@ -173,6 +240,7 @@ export default {
         }
       });
     },
+    limpaFormulario() {},
   },
 };
 </script>

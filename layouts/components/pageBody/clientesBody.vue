@@ -18,25 +18,23 @@
     <div class="border overflow-y-auto rounded-md" style="max-height: 70vh">
       <!-- Tabela -->
       <Loading :load="loading" class="" />
-      <el-table  :data="tableData" style="width: 100%" header-align="center">
+      <el-table :data="tableData" style="width: 100%" header-align="center">
         <el-table-column prop="nome" label="Nome"> </el-table-column>
         <el-table-column prop="cpf" label="CPF"> </el-table-column>
-        <el-table-column
-          prop="nascimento"
-          label="Nascimento"
-          :formatter="formatDate"
-        >
+        <el-table-column prop="nascimento" label="Nascimento" :formatter="formatDate">
         </el-table-column>
         <el-table-column prop="telefone" label="Telefone"> </el-table-column>
         <el-table-column align="center" label="Operações" width="170">
           <template slot-scope="scope" class="flex">
             <el-button-group>
               <el-button
-                type="primary" size="small"
+                type="primary"
+                size="small"
                 @click="handleEdit(scope.$index, scope.row)"
                 icon="el-icon-edit"
               ></el-button>
-              <el-button size="small"
+              <el-button
+                size="small"
                 type="danger"
                 @click.native.prevent="onDelete(scope.$index, scope.row)"
                 icon="el-icon-delete"
@@ -63,7 +61,7 @@
           class="p-5 w-"
         >
           <div class="flex flex-wrap justify-between">
-            <el-form-item  prop="nome" label="Nome " class="w-2/5">
+            <el-form-item prop="nome" label="Nome " class="w-2/5">
               <el-input
                 v-model="form.nome"
                 placeholder="Nome"
@@ -71,7 +69,7 @@
               ></el-input>
             </el-form-item>
 
-            <el-form-item prop="cpf"  label="CPF" class="w-2/5">
+            <el-form-item prop="cpf" label="CPF" class="w-2/5">
               <el-input
                 v-model="form.cpf"
                 v-mask="'###.###.###-##'"
@@ -90,7 +88,7 @@
               >
             </el-form-item>
 
-            <el-form-item  label="Telefone" class="w-2/5">
+            <el-form-item label="Telefone" class="w-2/5">
               <el-input
                 v-model="form.telefone"
                 v-mask="'(##)#########'"
@@ -126,11 +124,7 @@
     <el-drawer title="Filtrar" :visible.sync="drawer" size="20%">
       <hr />
       <div style="height: 90%" class="p-5">
-        <el-input
-          placeholder="Pesquisar"
-          v-model="search"
-          class="input-with-select mr-5"
-        >
+        <el-input placeholder="Pesquisar" v-model="search" class="input-with-select mr-5">
           <el-button
             slot="append"
             icon="el-icon-search"
@@ -147,7 +141,6 @@
   </div>
 </template>
 
-
 <script>
 import { mapState } from "vuex";
 import Loading from "../loading.vue";
@@ -159,7 +152,7 @@ export default {
       loading: false,
       titleModal: "",
       method: "",
-      search:'',
+      search: "",
       methodAddress: "",
       imageUrl: "",
       currentPage: 1,
@@ -227,7 +220,7 @@ export default {
   },
   methods: {
     formatDate(row, column, cellValue) {
-      let data = new Date(cellValue.replace(/-/g, '\/').replace(/T.+/, ''));
+      let data = new Date(cellValue.replace(/-/g, "\/").replace(/T.+/, ""));
       return data.toLocaleDateString("pt-BR");
     },
     async allData() {
@@ -236,14 +229,12 @@ export default {
         console.log(this.loading);
       };
       this.loading = true;
-      const { data, status } = await this.$axios
-        .get("/api/pessoa")
-        .catch((error) => {
-          return {
-            data: [],
-            status: error.response.status,
-          };
-        });
+      const { data, status } = await this.$axios.get("/api/pessoa").catch((error) => {
+        return {
+          data: [],
+          status: error.response.status,
+        };
+      });
       if (status === 200) {
         this.tableData = data[0].data;
         //console.log(data[0].data);
@@ -252,10 +243,7 @@ export default {
     },
     handleSizeChange(val) {
       this.pageSize = val;
-      this.tableSecundaria = this.tableData.slice(
-        this.firstItem,
-        this.pageSize
-      );
+      this.tableSecundaria = this.tableData.slice(this.firstItem, this.pageSize);
     },
     handleCurrentChange(val) {
       this.currentPage = val;
@@ -267,19 +255,13 @@ export default {
       } else {
         this.lastItem += this.pageSize;
       }
-      this.tableSecundaria = this.tableData.slice(
-        this.firstItem,
-        this.lastItem + 1
-      );
+      this.tableSecundaria = this.tableData.slice(this.firstItem, this.lastItem + 1);
     },
     prevPage() {
       this.lastItem = this.firstItem - 1;
 
       this.firstItem = this.firstItem - this.pageSize;
-      this.tableSecundaria = this.tableData.slice(
-        this.firstItem,
-        this.lastItem + 1
-      );
+      this.tableSecundaria = this.tableData.slice(this.firstItem, this.lastItem + 1);
     },
     async handleEdit(index, row) {
       this.dialogFormVisible = true;
@@ -334,32 +316,32 @@ export default {
         this.messageErrorClient();
       }
     },
-    onDelete(index, dados) {
-      this.$confirm(
-        "Esta ação deletará esta pessoa e todos seus dados. Deseja continuar?",
-        "Cuidado!",
-        {
-          confirmButtonText: "OK",
-          cancelButtonText: "Cancelar",
-          type: "warning",
-        }
-      )
-        .then(() => {
-          this.messageDelete();
+    // onDelete(index, dados) {
+    //   this.$confirm(
+    //     "Esta ação deletará esta pessoa e todos seus dados. Deseja continuar?",
+    //     "Cuidado!",
+    //     {
+    //       confirmButtonText: "OK",
+    //       cancelButtonText: "Cancelar",
+    //       type: "warning",
+    //     }
+    //   )
+    //     .then(() => {
+    //       this.messageDelete();
 
-          this.$axios
-            .delete(`/api/pessoa/delete/${dados.cpf}`)
-            .then((response) => {
-              var index = this.tableData.indexOf(dados);
-              this.tableData.splice(index, 1);
-            })
-            .catch((error) => {
-              messageError();
-            });
-        })
-        .catch(() => {});
-    },
-    onSearch(){},
+    //       this.$axios
+    //         .delete(`/api/pessoa/delete/${dados.cpf}`)
+    //         .then((response) => {
+    //           var index = this.tableData.indexOf(dados);
+    //           this.tableData.splice(index, 1);
+    //         })
+    //         .catch((error) => {
+    //           messageError();
+    //         });
+    //     })
+    //     .catch(() => {});
+    // },
+    onSearch() {},
     messageDelete() {
       this.$message({
         showClose: true,
@@ -391,7 +373,7 @@ export default {
   },
 };
 </script>
-<style >
+<style>
 .el-dialog {
   width: 30%;
 }
@@ -400,4 +382,3 @@ export default {
   width: 100%;
 }
 </style>
-

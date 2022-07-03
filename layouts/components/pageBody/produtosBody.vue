@@ -37,6 +37,7 @@
         style="margin: auto"
         :close-on-click-modal="false"
         :visible.sync="dialogFormVisible"
+        width="80%"
       >
         <FormProduto
           :produto="produto"
@@ -51,16 +52,13 @@
     <!-- Pagination -->
     <div class="block m-auto w-full">
       <el-pagination
-        class="m-auto"
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-        :current-page.sync="currentPage"
-        @next-click="nextPage"
-        @prev-click="prevPage"
-        :page-sizes="[10, 20, 50, 100]"
-        :page-size="handleCurrentChange.val"
-        layout="total, sizes, prev, pager, next"
-        :total="tableSecundaria.length"
+        @size-change="sizeChange"
+        @current-change="currentChange"
+        :page-sizes="[12, 50, 100, 200]"
+        :page-size="paginate.per_page"
+        layout="total, sizes, prev, pager, next, jumper"
+        :total="paginate.total"
+        :current-page.sync="paginate.current_page"
       >
       </el-pagination>
     </div>
@@ -128,7 +126,7 @@ export default {
       formEdit: [],
 
       tableData: [],
-      tableSecundaria: [],
+      // tableSecundaria: [],
       produto: {
         nome: null,
         descricao: null,
@@ -142,11 +140,22 @@ export default {
         quantidade_estoque: 0,
         valor_unitario: 0,
       },
+      paginate: {
+        current_page: 1,
+        last_page: 0,
+        first_page_url: null,
+        last_page_url: null,
+        prev_page_url: null,
+        next_page_url: null,
+        total: 0,
+        first_page_url: null,
+        per_page: 12,
+      },
     };
   },
   layout: false,
   mounted() {
-    this.tableSecundaria = this.tableData.slice(0, 10);
+    // this.tableSecundaria = this.tableData.slice(0, 10);
     this.allData();
     // this.loadCategorias();
   },
@@ -159,13 +168,21 @@ export default {
         };
       });
       if (status === 200) {
-        this.tableData = data;
+        this.tableData = data.data;
+        this.paginate.current_page = data.current_page;
+        this.paginate.last_page = data.last_page;
+        this.paginate.total = data.total;
+        this.paginate.per_page = parseInt(data.per_page);
+        this.paginate.first_page_url = data.first_page_url;
+        this.paginate.last_page_url = data.last_page_url;
+        this.paginate.prev_page_url = data.prev_page_url;
+        this.paginate.next_page_url = data.next_page_url;
       }
     },
 
     handleSizeChange(val) {
       this.pageSize = val;
-      this.tableSecundaria = this.tableData.slice(this.firstItem, this.pageSize);
+      // this.tableSecundaria = this.tableData.slice(this.firstItem, this.pageSize);
     },
     handleCurrentChange(val) {
       this.currentPage = val;
@@ -192,7 +209,7 @@ export default {
           this.$axios
             .delete(`api/produto/delete/${dados.idProduto}`)
             .then((response) => {
-              var index = this.tableData.indexOf(dados);
+              // var index = this.tableData.indexOf(dados);
               this.tableData.splice(index, 1);
             })
             .catch((error) => {
@@ -214,12 +231,12 @@ export default {
       } else {
         this.lastItem += this.pageSize;
       }
-      this.tableSecundaria = this.tableData.slice(this.firstItem, this.lastItem + 1);
+      // this.tableSecundaria = this.tableData.slice(this.firstItem, this.lastItem + 1);
     },
     prevPage() {
       this.lastItem = this.firstItem - 1;
       this.firstItem = this.firstItem - this.pageSize;
-      this.tableSecundaria = this.tableData.slice(this.firstItem, this.lastItem + 1);
+      // this.tableSecundaria = this.tableData.slice(this.firstItem, this.lastItem + 1);
     },
     messageDelete() {
       this.$message({
