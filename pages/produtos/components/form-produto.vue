@@ -27,17 +27,15 @@
           <el-col :span="10">
             <el-form-item label="Categoria" prop="idCategoria">
               <el-select
-                :disabled="visualizacao"
                 class="pr-2"
-                allow-create
                 v-model="produto.idCategoria"
+                @change="selectCategoria()"
                 filterable
-                @change="selectCategoria(produto.idCategoria)"
               >
                 <el-option
-                  v-for="item in mixinDepartamentos"
+                  v-for="item in mixinCategoria"
                   :key="item.id"
-                  :label="item.dep_nome"
+                  :label="item.nome"
                   :value="item.id"
                 >
                 </el-option>
@@ -118,6 +116,18 @@
 </template>
 
 <script>
+// function limpaFormulario() {
+//   return {
+//     nome: null,
+//     idCategoria: null,
+//     codigo_interno: null,
+//     codigo_barras: null,
+//     quantidade_minima: 0,
+//     quantidade_estoque: 0,
+//     valor_unitario: 0,
+//   };
+// }
+
 export default {
   props: {
     produto: {
@@ -198,7 +208,16 @@ export default {
         });
       this.loading = false;
       if (status === 200) {
-        {{categorias}}
+        {
+          {
+            {
+              {
+                categorias;
+              }
+            }
+            categorias;
+          }
+        }
         this.mixinCategoria = data.categorias;
       }
     },
@@ -240,7 +259,6 @@ export default {
         }
       });
     },
-    limpaFormulario() {},
   },
 };
 </script>

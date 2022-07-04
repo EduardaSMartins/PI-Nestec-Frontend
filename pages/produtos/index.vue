@@ -18,7 +18,6 @@
 <script>
 import { mapState, mapMutations } from "vuex";
 import ProdutosBody from "../../layouts/components/pageBody/produtosBody.vue";
-import FormProduto from "./components/form-produto.vue";
 
 export default {
   components: { ProdutosBody },

@@ -21,6 +21,13 @@
     "_name": "_6d8a0c4c"
   },
   {
+    "name": "clientes-components-form-cadastro",
+    "path": "/clientes/components/form-cadastro",
+    "component": "/home/eduarda/Documents/BCC/PI/Nestec/PI-Nestec-Frontend/pages/clientes/components/form-cadastro.vue",
+    "chunkName": "pages/clientes/components/form-cadastro",
+    "_name": "_3859790a"
+  },
+  {
     "name": "produtos-components-form-produto",
     "path": "/produtos/components/form-produto",
     "component": "/home/eduarda/Documents/BCC/PI/Nestec/PI-Nestec-Frontend/pages/produtos/components/form-produto.vue",

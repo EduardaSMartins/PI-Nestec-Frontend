@@ -7,6 +7,7 @@ import scrollBehavior from './router.scrollBehavior.js'
 const _31319b30 = () => interopDefault(import('../pages/clientes/index.vue' /* webpackChunkName: "pages/clientes/index" */))
 const _7a260cd1 = () => interopDefault(import('../pages/produtos/index.vue' /* webpackChunkName: "pages/produtos/index" */))
 const _6d8a0c4c = () => interopDefault(import('../pages/clientes/novo.vue' /* webpackChunkName: "pages/clientes/novo" */))
+const _3859790a = () => interopDefault(import('../pages/clientes/components/form-cadastro.vue' /* webpackChunkName: "pages/clientes/components/form-cadastro" */))
 const _c0b37bf0 = () => interopDefault(import('../pages/produtos/components/form-produto.vue' /* webpackChunkName: "pages/produtos/components/form-produto" */))
 const _c06d3224 = () => interopDefault(import('../pages/produtos/novo/novo.vue' /* webpackChunkName: "pages/produtos/novo/novo" */))
 const _171ab212 = () => interopDefault(import('../pages/produtos/editar/_id.vue' /* webpackChunkName: "pages/produtos/editar/_id" */))
@@ -35,6 +36,10 @@ export const routerOptions = {
     path: "/clientes/novo",
     component: _6d8a0c4c,
     name: "clientes-novo"
+  }, {
+    path: "/clientes/components/form-cadastro",
+    component: _3859790a,
+    name: "clientes-components-form-cadastro"
   }, {
     path: "/produtos/components/form-produto",
     component: _c0b37bf0,
